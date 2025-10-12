@@ -1,5 +1,5 @@
 import './style.css'
-import './bases/04-arrays'
+import './bases/07-array-destructuring'
 
 
 
