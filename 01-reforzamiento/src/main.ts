@@ -1,5 +1,6 @@
 import './style.css'
-import './bases/07-array-destructuring'
+import './bases/09-promises'
+
 
 
 
@@ -9,5 +10,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     
   </div>
 `
+
+
+
+// console.log(getHeroesByOwner(Owner.Marvel))
 
 
