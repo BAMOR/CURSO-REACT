@@ -1,5 +1,5 @@
 import './style.css'
-import './bases/10-fech-api'
+import './bases/11-async-await'
 
 
 
