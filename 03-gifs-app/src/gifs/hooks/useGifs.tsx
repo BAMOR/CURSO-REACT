@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import type { Gif } from "../../interfaces/gif.interface";
-import { getGifsByQuery } from "../components/actions/get-gifs-by-query.actions";
+import type { Gif } from "../interfaces/gif.interface";
+import { getGifsByQuery } from "../actions/get-gifs-by-query.actions";
 
 
         // const gifsCache:Record<string, Gif[]> = {}
