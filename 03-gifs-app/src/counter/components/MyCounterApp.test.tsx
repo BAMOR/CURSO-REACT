@@ -1,44 +1,39 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
-import { MyCounterApp } from "./MyCounterApp";
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
+import { MyCounterApp } from './MyCounterApp';
 
-describe('MyCounterApp',()=>{
-  test('should render the counter',()=>{
-    render(<MyCounterApp/>);
+describe('MyCounterApp', () => {
+  test('should render the component', () => {
+    render(<MyCounterApp />);
 
-    expect(screen.getByRole("heading", {level:1}).innerHTML).toContain(`counter:50`);
+    expect(screen.getByRole('heading', { level: 1 }).innerHTML).toContain(
+      `counter: 10`
+    );
 
-    expect(screen.getByRole("button", {name: '+1'})).toBeDefined();
-    expect(screen.getByRole("button", {name: '-1'})).toBeDefined();
-    expect(screen.getByRole("button", {name: 'Reset'})).toBeDefined();
-
-
+    expect(screen.getByRole('button', { name: '+1' })).toBeDefined();
+    expect(screen.getByRole('button', { name: '-1' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Reset' })).toBeDefined();
   });
-  test('should increment counter',()=>{
-    render(<MyCounterApp/>)
 
-    const labelH1 = screen.getByRole("heading", {level:1})
-    const button = screen.getByRole("button", {name: '+1'});
+  test('should increment the counter', () => {
+    render(<MyCounterApp />);
+
+    const labelH1 = screen.getByRole('heading', { level: 1 });
+    const button = screen.getByRole('button', { name: '+1' });
 
     fireEvent.click(button);
 
-    expect(labelH1.innerHTML).toContain('counter:51')
-   
-
+    expect(labelH1.innerHTML).toContain('counter: 11');
   });
 
-   test('should decrement counter',()=>{
-    render(<MyCounterApp/>)
+  test('should decrement the counter', () => {
+    render(<MyCounterApp />);
 
-    const labelH1 = screen.getByRole("heading", {level:1})
-    const button = screen.getByRole("button", {name: '-1'});
+    const labelH1 = screen.getByRole('heading', { level: 1 });
+    const button = screen.getByRole('button', { name: '-1' });
 
     fireEvent.click(button);
 
-    expect(labelH1.innerHTML).toContain('counter:49')
-   
-
-  })
-
-
+    expect(labelH1.innerHTML).toContain('counter: 9');
+  });
 });

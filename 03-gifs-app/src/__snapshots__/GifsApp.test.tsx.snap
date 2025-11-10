@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GifsApp > should render component properly  1`] = `
+exports[`GifsApp > should render component properly 1`] = `
 <div>
   <div
     class="content-center"
@@ -9,7 +9,7 @@ exports[`GifsApp > should render component properly  1`] = `
       Buscador de Gifs
     </h1>
     <p>
-      Descubre y Comparte el gif perfecto
+      Descubre y comparte el Gif perfecto
     </p>
   </div>
   <div
@@ -28,7 +28,7 @@ exports[`GifsApp > should render component properly  1`] = `
     class="previous-searches"
   >
     <h2>
-      Busquedas previas
+      Búsquedas previas
     </h2>
     <ul
       class="previous-searches-list"

@@ -1,49 +1,45 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, type KeyboardEvent } from 'react';
 
-interface Props{
-    placeholder:string
+interface Props {
+  placeholder?: string;
 
-    onQuery: (query:string) => void,
+  onQuery: (query: string) => void;
 }
 
-export const SearchBar = ({placeholder = "buscar", onQuery}:Props) => {
+export const SearchBar = ({ placeholder = 'Buscar', onQuery }: Props) => {
+  const [query, setQuery] = useState('');
 
-    const [query, setQuery] = useState('');
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onQuery(query);
+    }, 600);
 
-    useEffect (() => {
-
-        const timeoutId = setTimeout(() =>{
-            onQuery(query)
-        }, 700);
-
-        return () => {
-            clearTimeout(timeoutId);
-        }
-
-    }, [query, onQuery ])
-
-    const handleSearch = () =>{
-        onQuery(query)
-
+    return () => {
+      clearTimeout(timeoutId);
     };
+  }, [query, onQuery]);
 
-    const handleKayDown = (event:React.KeyboardEvent<HTMLInputElement>) =>{
-        if(event.key === 'Enter'){
-            handleSearch();
-        }
+  const handleSearch = () => {
+    onQuery(query);
+    // setQuery('');
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
+  };
 
-
-    return (
-        <div className="search-container">
-            <input type="text"
-             placeholder={placeholder} 
-             value={query}
-             onChange={(event) => setQuery(event.target.value)}
-             onKeyDown={ handleKayDown }
-
-             />
-            <button onClick={handleSearch}>Buscar</button>
-        </div>
-    )
-}
+  return (
+    <div className="search-container">
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <button onClick={handleSearch}>Buscar</button>
+    </div>
+  );
+};

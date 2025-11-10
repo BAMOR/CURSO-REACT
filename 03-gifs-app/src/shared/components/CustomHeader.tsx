@@ -1,22 +1,13 @@
-
 interface Props {
-
-    tittle: String,
-    description?: String
-
+  title: string;
+  description?: string;
 }
 
-
-export const CustomHeader = ({ tittle, description }: Props) => {
-    return (
-        <div className="content-center">
-            <h1>{tittle}</h1>
-            {
-                description && (
-                    <p>{description}</p>
-                )
-            }
-
-        </div>
-    )
-}
+export const CustomHeader = ({ title, description }: Props) => {
+  return (
+    <div className="content-center">
+      <h1>{title}</h1>
+      {description && <p>{description}</p>}
+    </div>
+  );
+};

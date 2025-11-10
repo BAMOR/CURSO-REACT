@@ -1,51 +1,34 @@
-
-import { render, screen } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { describe, test, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import { CustomHeader } from './CustomHeader';
 
-
-const title = 'gits App';
-
 describe('CustomHeader', () => {
-    test('should render the title correctly', () => {
+  const title = 'Test Title';
 
-        render(<CustomHeader tittle={title} />)
+  test('should render the title correctly', () => {
+    render(<CustomHeader title={title} />);
+    expect(screen.getByText(title)).toBeDefined();
+  });
 
-        // screen.debug();
+  test('should render the description when provided', () => {
+    const description = 'Test Description';
 
-        expect(screen.getByText(title)).toBeDefined();
+    render(<CustomHeader title={title} description={description} />);
 
-    });
+    expect(screen.getByText(description)).toBeDefined();
+    expect(screen.getByRole('paragraph')).toBeDefined();
+    expect(screen.getByRole('paragraph').innerHTML).toBe(description);
+  });
 
-    test('should render description when provider', () => {
-        const description = 'Test description';
-        render(<CustomHeader tittle={title} description={description} />);
+  test('should not render description when not provided', () => {
+    const { container } = render(<CustomHeader title={title} />);
 
-        // screen.debug()
-        expect(screen.getAllByText(description)).toBeDefined();
+    const divElement = container.querySelector('.content-center');
 
-        expect(screen.getByRole('paragraph')).toBeDefined();
-        expect(screen.getByRole('paragraph').innerHTML).toBe(description);
-        
-    });
+    const h1 = divElement?.querySelector('h1');
+    expect(h1?.innerHTML).toBe(title);
 
-    test('should not render description when not provided', () => {
-        const{container} = render(<CustomHeader tittle={title} />);
-
-  
-
-        const divElement = container.querySelector('.content-center')
-
-        const h1 = divElement?.querySelector('h1');
-        expect(h1?.innerHTML).toBe(title);
-
-        const p = divElement?.querySelector('p');
-        expect(p).toBeNull();
-
-        
-
-        
-
-    });
-
+    const p = divElement?.querySelector('p');
+    expect(p).toBeNull();
+  });
 });
