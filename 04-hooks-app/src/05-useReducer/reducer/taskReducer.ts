@@ -1,0 +1,129 @@
+import { X } from "lucide-react";
+import * as z from "zod";
+
+
+
+interface Todo {
+    id: number;
+    text: string;
+    completed: boolean;
+}
+
+interface TaskState {
+    todos: Todo[];
+    length: number;
+    completed: number;
+    pending: number;
+
+}
+
+export type TaskAction =
+    | { type: 'ADD_TODO', payload: string }
+    | { type: 'TOGGLE_TODO', payload: number }
+    | { type: 'DELETE_TODO', payload: number }
+
+const TodoSchema = z.object({
+    id: z.number(),
+    text: z.string(),
+    completed: z.boolean(),
+})
+
+const TaskStateSchema = z.object({
+    todos: z.array(TodoSchema),
+    length: z.number(),
+    completed: z.number(),
+    pending: z.number(),
+
+})
+
+
+export const getTasksInitialState = (): TaskState => {
+    const localStorageState = localStorage.getItem('tasks-state');
+
+    if (!localStorageState) {
+        return {
+            todos: [],
+            completed: 0,
+            pending: 0,
+            length: 0,
+        }
+    }
+
+    // validar mediante zod
+    const resultado = TaskStateSchema.safeParse(JSON.parse(localStorageState));
+    if(resultado.error){
+        console.log(resultado.error);
+        return {
+            todos: [],
+            completed: 0,
+            pending: 0,
+            length: 0,
+        }
+    }
+    // ! cuidado el objeto pudo haber sido modificado
+    return  resultado.data;
+
+}
+
+export const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
+
+
+    switch (action.type) {
+        case 'ADD_TODO': {
+            const newTodo: Todo = {
+                id: Date.now(),
+                text: action.payload,
+                completed: false
+            };
+
+
+
+            return {
+                ...state,
+                todos: [...state.todos, newTodo],
+                length: state.todos.length + 1,
+                pending: state.pending + 1,
+
+            }
+        }
+
+        case 'DELETE_TODO': {
+            const currenTodos = state.todos.filter((todo) => todo.id != action.payload);
+
+            return {
+                ...state,
+                todos: currenTodos,
+                length: currenTodos.length,
+                completed: currenTodos.filter((todo) => todo.completed).length,
+                pending: currenTodos.filter((todo) => !todo.completed).length,
+
+            }
+        }
+
+
+        case 'TOGGLE_TODO': {
+            const updateTodos = state.todos.map((todo) => {
+                if (todo.id === action.payload) {
+                    return { ...todo, completed: !todo.completed };
+                }
+                return todo;
+            });
+
+            return {
+                ...state,
+                todos: updateTodos,
+
+                completed: updateTodos.filter((todo) => todo.completed).length,
+                pending: updateTodos.filter((todo) => !todo.completed).length,
+
+            }
+        }
+
+        default:
+            return state
+
+    }
+
+
+
+}
