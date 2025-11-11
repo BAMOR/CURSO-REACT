@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import { fireEvent, render, screen } from '@testing-library/react'
 import { ItemCounter } from "./ItemCounter";
 
@@ -39,14 +39,46 @@ describe('ItemCounter', () => {
 
 
     test('should decrease count when -1 button is press', () => {
-
-
+        render(<ItemCounter name={'test item'} quantity={5} />)
+        const buttonSubtract = screen.getByText('-1')
+        fireEvent.click(buttonSubtract)
+        expect(screen.getByText('4')).toBeDefined()
     })
 
-    test('should decrease count when -1 button is press and quantity is 1', () => {
-
-
+    test('should not decrease below 1', () => {
+        render(<ItemCounter name={'test item'} quantity={1} />)
+        const buttonSubtract = screen.getByText('-1')
+        fireEvent.click(buttonSubtract)
+        expect(screen.getByText('1')).toBeDefined()
     })
 
+
+    test('should change to red when count is one', () =>{
+        const quantity = 1;
+        const name = 'test item';
+
+        render(<ItemCounter  name={name} quantity={quantity}/>);
+
+        const itemText = screen.getByText(name);
+
+       expect(itemText.style.color).toBe('red');
+
+
+    } )
+
+
+        test('should change to red when count is grater than 1', () =>{
+        const quantity = 2;
+        const name = 'test item';
+
+        render(<ItemCounter  name={name} quantity={quantity}/>);
+
+        const itemText = screen.getByText(name);
+
+       expect(itemText.style.color).toBe('black');
+
+
+    } )
+    
 
 })
