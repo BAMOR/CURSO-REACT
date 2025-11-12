@@ -60,18 +60,87 @@ export const ScrambleWords = () => {
     // Previene el refresh de la página
     e.preventDefault();
     // Implementar lógica de juego
-    console.log('Intento de adivinanza:', guess, currentWord);
+    if(guess === currentWord){
+      // 1. suma los puntos
+      setPoints(points+1);
+
+      // 2. crea un nuevo arreglo sin la palabra actual
+      const newWords = words.slice(1);
+
+      //3. guardas el valor en el estado
+      setWords(newWords);
+
+      //4. quedan mas palabras 
+      if(newWords.length>0){
+        const nextWord = newWords[0];
+        setCurrentWord(nextWord);
+        setScrambledWord(scrambleWord(nextWord))
+      }else{
+        setIsGameOver(true);
+      }
+      //5. se limpia 
+      setGuess('');
+
+    }else{
+      setErrorCounter(errorCounter+1);
+      if(errorCounter + 1 >= maxAllowErrors){
+        setIsGameOver(true);
+      }
+      setGuess('');
+    }
+    
+
 
   };
 
   const handleSkip = () => {
-    console.log('Palabra saltada');
+    // 1. Verificamos que aún pueda saltar (opcional, pero bueno tenerlo)
+    if(skipCounter>= maxSkips|| isGameOver)return;
+    // 2. Aumentamos el contador de saltos
+    setSkipCounter(skipCounter+1);
 
-    
+    // 3. Creamos un nuevo arreglo SIN la palabra actual
+    const newWords = words.slice(1);
+
+    // 4. Actualizamos el estado de palabras
+    setWords(newWords);
+
+    // 5. ¿Quedan palabras?
+  if (newWords.length > 0) {
+    const siguientePalabra = newWords[0];
+    setCurrentWord(siguientePalabra);
+    setScrambledWord(scrambleWord(siguientePalabra));
+  } else {
+    // No quedan → fin del juego
+    setIsGameOver(true);
+  }
+
+  // 6. Limpiamos el input (por si tenía algo escrito)
+  setGuess('');
+
   };
 
   const handlePlayAgain = () => {
-    console.log('Jugar de nuevo');
+
+      // 1. Mezclar de nuevo las palabras originales
+  const palabrasMezcladas = shuffleArray([...GAME_WORDS]); // usamos copia para no modificar el original
+
+  // 2. Tomar la primera palabra
+  const primeraPalabra = palabrasMezcladas[0];
+
+  // 3. Actualizar todos los estados
+  setWords(palabrasMezcladas);
+  setCurrentWord(primeraPalabra);
+  setScrambledWord(scrambleWord(primeraPalabra));
+  setGuess('');
+  setPoints(0);
+  setErrorCounter(0);
+  setSkipCounter(0);
+  setIsGameOver(false)
+
+
+    
+    
     
   };
 
