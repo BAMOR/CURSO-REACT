@@ -1,7 +1,3 @@
-
-
 export const HeroPage = () => {
-  return (
-    <div>HeroPages</div>
-  )
-}
+  return <div>HeroPage</div>;
+};
