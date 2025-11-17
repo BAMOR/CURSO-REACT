@@ -5,10 +5,12 @@ import { HeroGrid } from '@/heroes/components/HeroGrid';
 // import {  useState } from 'react';
 import { CustomPagination } from '@/components/custom/CustomPagination';
 import { CustomBreadcrumbs } from '@/components/custom/CustomBreadcrumbs';
-import { getHeroesByPageAction } from '@/heroes/actions/get-heroes-by-page.actions';
-import { useQuery } from '@tanstack/react-query';
+
 import { useSearchParams } from 'react-router';
 import { useMemo } from 'react';
+
+import { useHeroSummary } from '@/heroes/hooks/useHeroSummary';
+import { usePaginatedHero } from '@/heroes/hooks/usePaginatedHero';
 
 export const HomePage = () => {
 
@@ -17,21 +19,27 @@ export const HomePage = () => {
   let [searchParams, setSearchParams] = useSearchParams();
 
 
-  const activeTab = searchParams.get('tab') ?? 'all';
+  const activeTab = searchParams.get('tab') ?? 'all'; 
+  const page = searchParams.get('page') ?? '1'; 
+  const limit = searchParams.get('limit') ?? '6';
 
   const selectTab = useMemo(()=>{
     const valiTabs = ['all' , 'favorites' , 'heroes' , 'villains']
     return valiTabs.includes(activeTab) ? activeTab : 'all'
 
+
   },[activeTab])
 
 
 
-  const {data:heroesResponse} = useQuery({
-    queryKey: ['heroes'],
-    queryFn: ()=> getHeroesByPageAction(),
-    staleTime: 1000*60*5
-  });
+  const {data:heroesResponse } = usePaginatedHero({
+    page: +page,
+    limit: +limit
+})
+
+
+
+  const {data:summary} = useHeroSummary()
 
  
 
@@ -58,7 +66,7 @@ export const HomePage = () => {
               prev.set('tab', 'all')
               return prev;
             })}>
-              All Characters (16)
+              All Characters ({summary?.totalHeroes})
             </TabsTrigger>
             <TabsTrigger
               value="favorites"
@@ -74,7 +82,7 @@ export const HomePage = () => {
               prev.set('tab', 'heroes')
               return prev;
             })}>
-              Heroes (12)
+              Heroes ({summary?.heroCount})
             </TabsTrigger>
             <TabsTrigger
               value="villains"
@@ -83,7 +91,7 @@ export const HomePage = () => {
               return prev;
             })}
             >
-              Villains (2)
+              Villains ({summary?.villainCount})
             </TabsTrigger>
           </TabsList>
 
@@ -109,7 +117,7 @@ export const HomePage = () => {
         </Tabs>
 
         {/* Pagination */}
-        <CustomPagination totalPages={8} />
+        <CustomPagination totalPages={heroesResponse?.pages ?? 1} />
       </>
     </>
   );
