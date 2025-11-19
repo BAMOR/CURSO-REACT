@@ -1,6 +1,6 @@
 
 
-export const ShoyLayout = () => {
+export const ShopLayout = () => {
   return (
     <div>ShoyLayout</div>
   )
