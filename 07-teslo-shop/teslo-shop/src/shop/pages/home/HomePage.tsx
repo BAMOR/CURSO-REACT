@@ -1,19 +1,16 @@
-import { CustomPagination } from "@/components/Custom/CustomPagination"
-import { products } from "@/mocks/products.mock"
-import { CustomJubotron } from "@/shop/components/CustomJubotron"
-import { ProductsGrid } from "@/shop/components/ProductsGrid"
-
-
+import { CustomPagination } from '@/components/custom/CustomPagination';
+import { products } from '@/mocks/products.mock';
+import { CustomJumbotron } from '@/shop/components/CustomJumbotron';
+import { ProductsGrid } from '@/shop/components/ProductsGrid';
 
 export const HomePage = () => {
   return (
     <>
-    <CustomJubotron title="Todos los productos"/>
+      <CustomJumbotron title="Todos los productos" />
 
-    <ProductsGrid products={products}/>
-    <CustomPagination totalPages={7}/>
+      <ProductsGrid products={products} />
 
-
-      </>
-  )
-}
+      <CustomPagination totalPages={7} />
+    </>
+  );
+};

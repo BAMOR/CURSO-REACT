@@ -1,75 +1,77 @@
-import { Search, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useRef } from "react";
-import { useParams, useSearchParams, Link } from "react-router";
-import { cn } from "@/lib/utils";
-import { CustomLogo } from "@/components/Custom/CustomLogo";
+import { useRef, type KeyboardEvent } from 'react';
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Link, useParams, useSearchParams } from 'react-router';
+import { cn } from '@/lib/utils';
+import { CustomLogo } from '@/components/custom/CustomLogo';
+
 export const CustomHeader = () => {
-
-
-  const {gender} = useParams();
-
-
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const query = searchParams.get('query') || '';
+  const { gender } = useParams();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const query = searchParams.get('query') || '';
 
-  const handleKeyDown =(event:React.KeyboardEvent<HTMLInputElement>) =>{
+  const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return;
+    const query = inputRef.current?.value;
 
-    if(event.key == 'enter') return;
-     const query = inputRef.current?.value;
+    const newSearchParams = new URLSearchParams();
 
-     const newSearchParams = new URLSearchParams();
-     if(!query){
-      newSearchParams.delete('query')
+    if (!query) {
+      newSearchParams.delete('query');
+    } else {
+      newSearchParams.set('query', inputRef.current!.value);
+    }
 
-     }else {
+    setSearchParams(newSearchParams);
+  };
 
-       newSearchParams.set('query', inputRef.current?.value|| '')
-     }
-
-    setSearchParams(newSearchParams)
-  }
-
-
-  return <header className="sticky top-0 z-50 w-full border-b backdrop-blur bg-slate-50">
+  return (
+    <header className="sticky top-0 z-50 w-full border-b backdrop-blur bg-slate-50">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <CustomLogo/>
+          <CustomLogo />
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-            to="/" 
-            className= {cn(`text-sm font-medium transition-colors hover:text-primary`,
-              !gender ? 'underline underline-offset-4' : ''
-            )}>
+            <Link
+              to="/"
+              className={cn(
+                `text-sm font-medium transition-colors hover:text-primary`,
+                !gender ? 'underline underline-offset-4' : ''
+              )}
+            >
               Todos
             </Link>
-            <Link 
-            to= "/gender/men" 
-            className= {cn(`text-sm font-medium transition-colors hover:text-primary`,
-              gender === 'men' ? 'underline underline-offset-4' : ''
-            )}>
+            <Link
+              to="/gender/men"
+              className={cn(
+                `text-sm font-medium transition-colors hover:text-primary`,
+                gender === 'men' ? 'underline underline-offset-4' : ''
+              )}
+            >
               Hombres
             </Link>
             <Link
-             to="gender/woman" 
-            className= {cn(`text-sm font-medium transition-colors hover:text-primary`,
-              gender === 'woman' ? 'underline underline-offset-4' : ''
-            )}>
+              to="/gender/women"
+              className={cn(
+                `text-sm font-medium transition-colors hover:text-primary`,
+                gender === 'women' ? 'underline underline-offset-4' : ''
+              )}
+            >
               Mujeres
             </Link>
-            <Link 
-            to="/gender/kid" 
-            className= {cn(`text-sm font-medium transition-colors hover:text-primary`,
-              gender === 'kid' ? 'underline underline-offset-4' : ''
-            )}>
-              Ninos
+            <Link
+              to="/gender/kid"
+              className={cn(
+                `text-sm font-medium transition-colors hover:text-primary`,
+                gender === 'kid' ? 'underline underline-offset-4' : ''
+              )}
+            >
+              Niños
             </Link>
           </nav>
 
@@ -78,44 +80,34 @@ export const CustomHeader = () => {
             <div className="hidden md:flex items-center space-x-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input 
-                placeholder="Buscar productos..."
-                 className="pl-9 w-64 h-9" 
-                 ref={inputRef}
-                 defaultValue={query}
-                 onKeyDown={handleKeyDown}
-                 />
+                <Input
+                  ref={inputRef}
+                  placeholder="Buscar productos..."
+                  className="pl-9 w-64 h-9 bg-white"
+                  onKeyDown={handleSearch}
+                  defaultValue={query}
+                />
               </div>
             </div>
-            
+
             <Button variant="ghost" size="icon" className="md:hidden">
               <Search className="h-5 w-5" />
             </Button>
-            
-           <Link to={'/auth/login'}>
-            <Button
-            variant={'default'}
-            size={'sm'}
-            className="ml-2"
-            >
-              Login
-            </Button>
-           </Link>
 
-             <Link to={'/auth/login'}>
-            <Button
-            variant={'destructive'}
-            size={'sm'}
-            className="ml-2"
-            >
-              Admin
-            </Button>
-           </Link>
+            <Link to="/auth/login">
+              <Button variant="default" size="sm" className="ml-2">
+                Login
+              </Button>
+            </Link>
 
-
+            <Link to="/admin">
+              <Button variant="destructive" size="sm" className="ml-2">
+                Admin
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
-export default CustomHeader;
